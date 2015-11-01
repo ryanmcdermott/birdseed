@@ -10,7 +10,7 @@ with open(path.join(here, 'README.md'), encoding='utf-8') as f:
 setup(
     name='birdseed',
 
-    version='0.1.0',
+    version='0.2.0',
 
     description='Twitter random number seeder/generator',
     long_description=long_description,

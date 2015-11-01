@@ -1,11 +1,17 @@
 # Birdseed
 ## What is it?
-`birdseed` is a utility to seed Python's random number generator with the first tweet it finds from Twitter's search API for a given search query. Use Twitter's noise to your advantage!
-
+`birdseed` is a utility to create pseudo and/or "real" random numbers from tweets based on a particular search query over Twitter's API. Use Twitter's noise to your advantage!
 
 ## What else?
-This is for fun, it's not secure. Don't use it in production :)
+**This is for fun. It's not secure. Don't use it in production :)**
 
+It can be run in two modes: `real=True` and `real=False`. Real mode is default.
+
+When run in real mode, `birdseed` will get up to 100 tweets for a particular search query, compute a hash for each tweet, and store these in a list. When the user calls `birdseed_instance.random()` the last hash will be popped off the hashes list. When the list of hashes is 0, Twitter's API will be called again for the given search query. *There's no guarantee though that tweets coming back are new and were not previously hashed and popped off. Ideally, use a search query with lots of entropy (something short like a single character: 'a', 'e', 'i', 'o', 'u')*
+
+When run in non-real (pseudo) mode, `birdseed` will seed Python's random number generator with the first tweet it finds for the given search query.
+
+The hash algorithm used is SHA224, with an input vector of the text of the tweet, the Twitter handle, and the timestamp. 
 
 ## Requirements
 Python 2.7+ or Python 3.3+, pip, and Twitter App credentials 

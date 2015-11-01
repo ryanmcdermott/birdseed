@@ -38,7 +38,7 @@ setup(
 
     keywords='random sysadmin development',
 
-    py_modules=['birdseed']
+    py_modules=['birdseed'],
 
     install_requires=['twitter>=2.2'],
 )

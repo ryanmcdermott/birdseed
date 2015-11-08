@@ -16,6 +16,8 @@ The hash algorithm used is SHA224, with an input vector of the text of the tweet
 ## Requirements
 Python 2.7+ or Python 3.3+, pip, and Twitter App credentials 
 
+## Installation
+`pip install birdseed`
 
 ## Usage
 ```python

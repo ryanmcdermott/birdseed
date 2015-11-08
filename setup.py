@@ -32,5 +32,5 @@ setup(
 
     py_modules=['birdseed'],
 
-    install_requires=['twitter>=2.2'],
+    install_requires=['twitter>=1.17.1'],
 )

@@ -3,7 +3,7 @@ from setuptools import setup
 setup(
     name='birdseed',
 
-    version='0.2.1',
+    version='0.2.3',
 
     description='Twitter random number seeder/generator',
 

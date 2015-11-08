@@ -6,7 +6,7 @@ This is for fun, it's not secure. Don't use it in production :)
 """
 
 __author__ = "Ryan McDermott (ryan.mcdermott@ryansworks.com)"
-__version__ = "0.2.1"
+__version__ = "0.2.3"
 __copyright__ = "Copyright (c) 2015 Ryan McDermott"
 __license__ = "MIT"
 

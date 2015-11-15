@@ -6,7 +6,7 @@ This is for fun, it's not secure. Don't use it in production :)
 """
 
 __author__ = "Ryan McDermott (ryan.mcdermott@ryansworks.com)"
-__version__ = "0.2.3"
+__version__ = "0.2.4"
 __copyright__ = "Copyright (c) 2015 Ryan McDermott"
 __license__ = "MIT"
 
@@ -44,9 +44,12 @@ class Birdseed():
         if len(self.hashes) == 0:
             self.get_randomness(self.query)
 
-        rand_hash = self.hashes.pop()
-        # Format hash as a floating point number < 1, just as Python's pseudo random generator does.
-        return (int(rand_hash, 16) >> 171) * 0.0000000000000001
+        if len(self.hashes) >= 1:
+            rand_hash = self.hashes.pop()
+            # Format hash as a floating point number < 1, just as Python's pseudo random generator does.
+            return (int(rand_hash, 16) >> 171) * 0.0000000000000001
+        else:
+            raise ValueError('No results returned from API. Either the keys are too stressed or search term has no results')
 
 
     def _pseudo_random(self):
@@ -54,7 +57,7 @@ class Birdseed():
 
 
     def _create_hash(self, result):
-        """ Computer SHA224 hash based oncatenation of the creation time, the twitter handle and the text."""
+        """ Compute SHA224 hash based on concatenation of the creation time, the twitter handle and the text."""
         text = result["created_at"].encode('utf-8') + result["user"]["screen_name"].encode('utf-8') + result["text"].encode('utf-8')
         return hashlib.sha224(text).hexdigest()
 

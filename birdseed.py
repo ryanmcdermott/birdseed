@@ -23,7 +23,7 @@ class Birdseed():
         self.real = real
         self.query = query
 
-        # Create a list that will hold all of the hashes of the
+        # Create a list that will hold all of the hashes of the results from the query
         self.hashes = []
 
         if any(not x for x in (self.access_key, self.access_secret, self.consumer_key, self.consumer_secret)):

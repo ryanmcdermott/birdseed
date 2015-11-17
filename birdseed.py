@@ -23,21 +23,36 @@ class Birdseed():
         self.real = real
         self.query = query
 
+        self._validate_init_args()
+
         # Create a list that will hold all of the hashes of the results from the query
         self.hashes = []
 
-        if any(not x for x in (self.access_key, self.access_secret, self.consumer_key, self.consumer_secret)):
-            raise ValueError('Please provide all of the following: access_key, access_secret, consumer_key, consumer_secret')
-        else:
-            self.twitter = Twitter(auth = OAuth(self.access_key, self.access_secret, self.consumer_key, self.consumer_secret))
-
-        if not query:
-            raise ValueError('Please provide a search query')
+        self.twitter = Twitter(auth = OAuth(self.access_key, self.access_secret, self.consumer_key, self.consumer_secret))
 
         if self.real:
             self.get_randomness(self.query)
         else:
             self.reseed(self.query)
+
+
+    def _validate_init_args(self):
+        """ Make sure all the constructor arguments were passed and are not None. """
+
+        birdseed_args = {
+            'access_key': self.access_key,
+            'access_secret': self.access_secret,
+            'consumer_key': self.consumer_key,
+            'consumer_secret': self.consumer_secret,
+            'query': self.query
+        }
+
+        # iterate through the keys of the dict
+        # check that the value it represents is "truthy" (in this case, not None)
+        # if it IS None, raise a ValueError telling the caller it must provide that argument
+        for key in birdseed_args:
+            if not birdseed_args[key]:
+                raise ValueError('Please provide `{}`'.format(key))
 
 
     def _real_random(self):

@@ -1,5 +1,5 @@
 """
-Birdseed is a utility to create pseudo and/or "real" random numbers from tweets based 
+Birdseed is a utility to create pseudo and/or "real" random numbers from tweets based
 on a particular search query over Twitter's API. Use Twitter's noise to your advantage!
 
 This is for fun, it's not secure. Don't use it in production :)
@@ -23,18 +23,18 @@ class Birdseed():
         self.real = real
         self.query = query
 
-        # Create a list that will hold all of the hashes of the 
+        # Create a list that will hold all of the hashes of the
         self.hashes = []
 
-        if self.access_key == None or self.access_secret == None or self.consumer_key == None or self.consumer_secret == None:
+        if any(not x for x in (self.access_key, self.access_secret, self.consumer_key, self.consumer_secret)):
             raise ValueError('Please provide all of the following: access_key, access_secret, consumer_key, consumer_secret')
         else:
             self.twitter = Twitter(auth = OAuth(self.access_key, self.access_secret, self.consumer_key, self.consumer_secret))
 
-        if query == None:
+        if not query:
             raise ValueError('Please provide a search query')
 
-        if self.real: 
+        if self.real:
             self.get_randomness(self.query)
         else:
             self.reseed(self.query)
@@ -72,7 +72,7 @@ class Birdseed():
 
     def get_randomness(self, query):
         """ Public method to gather 100 tweets based on a search query and computer their hashes and store them in an internal list"""
-        if self.real == False:
+        if not self.real:
             raise ValueError('Class instance of Birdseed is being run as a pseudo random number generator. Create a new instance that is real')
 
         query = self.twitter.search.tweets(q=query, count=100)
@@ -83,12 +83,12 @@ class Birdseed():
 
     def reseed(self, query):
         """ Public method to seed Python's random number generator with the first tweet obtained from Twitter's API for a particular query"""
-        if self.real == True:
+        if self.real:
             raise ValueError('Class instance of Birdseed is being run as a real random number generator. Create a new instance that is pseudo')
 
         self.query = query
-        
-        # Perform a basic search 
+
+        # Perform a basic search
         # https://dev.twitter.com/docs/api/1/get/search
         query = self.twitter.search.tweets(q = query)
 

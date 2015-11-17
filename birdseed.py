@@ -91,9 +91,7 @@ class Birdseed():
             raise ValueError('Class instance of Birdseed is being run as a pseudo random number generator. Create a new instance that is real')
 
         query = self.twitter.search.tweets(q=query, count=100)
-
-        for result in query["statuses"]:
-            self.hashes.append(self._create_hash(result))
+        self.hashes.extend([self._create_hash(result) for result in query['statuses']])
 
 
     def reseed(self, query):

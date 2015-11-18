@@ -14,6 +14,7 @@ from twitter import *
 import hashlib
 import random
 
+
 class Birdseed():
     def __init__(self, query, access_key, access_secret, consumer_key, consumer_secret, real=True):
         self.access_key = access_key
@@ -28,13 +29,12 @@ class Birdseed():
         # Create a list that will hold all of the hashes of the results from the query
         self.hashes = []
 
-        self.twitter = Twitter(auth = OAuth(self.access_key, self.access_secret, self.consumer_key, self.consumer_secret))
+        self.twitter = Twitter(auth=OAuth(self.access_key, self.access_secret, self.consumer_key, self.consumer_secret))
 
         if self.real:
             self.get_randomness(self.query)
         else:
             self.reseed(self.query)
-
 
     def _validate_init_args(self):
         """ Make sure all the constructor arguments were passed and are not None. """
@@ -54,7 +54,6 @@ class Birdseed():
             if not birdseed_args[key]:
                 raise ValueError('Please provide `{}`'.format(key))
 
-
     def _real_random(self):
         if len(self.hashes) == 0:
             self.get_randomness(self.query)
@@ -66,16 +65,13 @@ class Birdseed():
         else:
             raise ValueError('No results returned from API. Either the keys are too stressed or search term has no results')
 
-
     def _pseudo_random(self):
         return random.random()
-
 
     def _create_hash(self, result):
         """ Compute SHA224 hash based on concatenation of the creation time, the twitter handle and the text."""
         text = result["created_at"].encode('utf-8') + result["user"]["screen_name"].encode('utf-8') + result["text"].encode('utf-8')
         return hashlib.sha224(text).hexdigest()
-
 
     def random(self):
         """ Public method to get the random number based on if it's pseudo or real"""
@@ -84,7 +80,6 @@ class Birdseed():
         else:
             return self._pseudo_random()
 
-
     def get_randomness(self, query):
         """ Public method to gather 100 tweets based on a search query and computer their hashes and store them in an internal list"""
         if not self.real:
@@ -92,7 +87,6 @@ class Birdseed():
 
         query = self.twitter.search.tweets(q=query, count=100)
         self.hashes.extend([self._create_hash(result) for result in query['statuses']])
-
 
     def reseed(self, query):
         """ Public method to seed Python's random number generator with the first tweet obtained from Twitter's API for a particular query"""
@@ -103,7 +97,7 @@ class Birdseed():
 
         # Perform a basic search
         # https://dev.twitter.com/docs/api/1/get/search
-        query = self.twitter.search.tweets(q = query)
+        query = self.twitter.search.tweets(q=query)
 
         # Seed Python's random number generator with the first status found.
         result = query["statuses"][0]

@@ -3,7 +3,7 @@ Birdseed is a utility to create pseudo and/or "real" random numbers from tweets
 based on a particular search query over Twitter's API. Use Twitter's noise to
 your advantage!
 
-This is for fun, it's not secure. Don't use it in production :)
+This is for fun, it's not secure. Don't use it in production. :)
 """
 
 __author__ = "Ryan McDermott (ryan.mcdermott@ryansworks.com)"
@@ -72,7 +72,8 @@ class Birdseed():
             return (int(rand_hash, 16) >> 171) * 0.0000000000000001
         else:
             raise ValueError('No results returned from API. Either the keys'
-                             'are too stressed or search term has no results')
+                             'are too stressed or the search term has no'
+                             'results.')
 
     def _pseudo_random(self):
         return random.random()
@@ -87,7 +88,7 @@ class Birdseed():
 
     def random(self):
         """ Public method to get the random number based on if it's pseudo or
-            real"""
+            real."""
         if self.real:
             return self._real_random()
         else:
@@ -95,11 +96,11 @@ class Birdseed():
 
     def get_randomness(self, query):
         """ Public method to gather 100 tweets based on a search query and
-            computer their hashes and store them in an internal list"""
+            compute their hashes and store them in an internal list."""
         if not self.real:
             raise ValueError('Class instance of Birdseed is being run as a'
                              'pseudo random number generator. Create a new'
-                             'instance that is real')
+                             'instance that is real.')
 
         query = self.twitter.search.tweets(q=query, count=100)
         self.hashes.extend(
@@ -107,11 +108,11 @@ class Birdseed():
 
     def reseed(self, query):
         """ Public method to seed Python's random number generator with the
-            first tweet obtained from Twitter's API for a particular query"""
+            first tweet obtained from Twitter's API for a particular query."""
         if self.real:
             raise ValueError('Class instance of Birdseed is being run as a'
                              'real random number generator. Create a new'
-                             'instance that is pseudo')
+                             'instance that is pseudo.')
 
         self.query = query
 

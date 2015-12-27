@@ -11,7 +11,7 @@ __version__ = "0.2.4"
 __copyright__ = "Copyright (c) 2015 Ryan McDermott"
 __license__ = "MIT"
 
-from twitter import *
+import twitter
 import hashlib
 import random
 
@@ -32,8 +32,9 @@ class Birdseed():
         # the query
         self.hashes = []
 
-        self.twitter = Twitter(auth=OAuth(self.access_key, self.access_secret,
-                               self.consumer_key, self.consumer_secret))
+        self.twitter = twitter.Twitter(auth=twitter.OAuth(self.access_key,
+                                       self.access_secret, self.consumer_key,
+                                       self.consumer_secret))
 
         if self.real:
             self.get_randomness(self.query)
@@ -54,7 +55,7 @@ class Birdseed():
 
         # iterate through the keys of the dict
         # check that the value it represents is "truthy" (in this case, not
-        #   None)
+        # None)
         # if it IS None, raise a ValueError telling the caller it must provide
         # that argument
         for key in birdseed_args:
@@ -68,7 +69,7 @@ class Birdseed():
         if len(self.hashes) >= 1:
             rand_hash = self.hashes.pop()
             # Format hash as a floating point number < 1, just as Python's
-            # pseudo random generator does.
+            # pseudo random generator does
             return (int(rand_hash, 16) >> 171) * 0.0000000000000001
         else:
             raise ValueError('No results returned from API. Either the keys'
@@ -103,8 +104,8 @@ class Birdseed():
                              'instance that is real.')
 
         query = self.twitter.search.tweets(q=query, count=100)
-        self.hashes.extend(
-            [self._create_hash(result) for result in query['statuses']])
+        self.hashes.extend([self._create_hash(result) for result
+                           in query['statuses']])
 
     def reseed(self, query):
         """ Public method to seed Python's random number generator with the
@@ -116,11 +117,10 @@ class Birdseed():
 
         self.query = query
 
-        # Perform a basic search
-        # https://dev.twitter.com/docs/api/1/get/search
+        # Perform a basic search https://dev.twitter.com/docs/api/1/get/search
         query = self.twitter.search.tweets(q=query)
 
-        # Seed Python's random number generator with the first status found.
+        # Seed Python's random number generator with the first status found
         result = query["statuses"][0]
         seed = int(hashlib.sha224(self._create_hash(result)).hexdigest(), 16)
         random.seed(seed)
